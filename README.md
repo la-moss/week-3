@@ -1,4 +1,4 @@
-# Azure IAM (RBAC) — Terraform Incident Practice (Senior)
+# Azure IAM (RBAC) — Terraform Incident Practice
 
 ## Context
 A recent access review flagged elevated privileges in a custom RBAC role used by an automation identity. At the same time, rollout work has started to duplicate the workload footprint into a secondary region for resiliency. A policy gate in CI has begun blocking changes with the message:
