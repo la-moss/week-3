@@ -1,3 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches: [ "*" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: senior/terraform
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Create venv and install deps
+        run: |
+          python -m venv ../../.venv
+          source ../../.venv/bin/activate
+          pip install -r ../../requirements.txt
+
+      - name: Terraform fmt
+        run: terraform fmt -check
+
+      - name: Terraform init
+        run: terraform init -backend=false
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Guardrail
+        run: |
+          source ../../.venv/bin/activate
+          python ../../scripts/guardrails/run.py
 name: terraform-ci
 on: [push, pull_request]
 

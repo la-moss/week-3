@@ -16,6 +16,29 @@ A recent access review flagged elevated privileges in a custom RBAC role used by
 - Authorization behavior is consistent across primary and secondary region resources.
 - Evidence is attached: before/after permission diff, and the resulting role definition changes (redacted as needed).
 
+## Local validation (recommended)
+1) Create and activate a virtualenv:
+```
+python3 -m venv .venv
+source .venv/bin/activate
+```
+2) Install dependencies:
+```
+pip install -r requirements.txt
+```
+3) Run Terraform checks from `senior/terraform`:
+```
+terraform fmt -check
+terraform init -backend=false
+terraform validate
+```
+4) Run the guardrail from repo root:
+```
+python scripts/guardrails/run.py
+```
+   - Failure message (expected until fixed): `guardrail unmet: least-privilege policy violation`
+   - Passing message: `guardrail satisfied: least-privilege policy aligned`
+
 ## Evidence expectations
 - Policy/role definition diff (before vs. after).
 - A concise allow/deny matrix for the automation identity’s intended actions.
